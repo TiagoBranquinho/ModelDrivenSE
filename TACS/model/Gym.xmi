@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gym:Gym xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:gym="http://www.example.org/gym"
+    xsi:schemaLocation="http://www.example.org/gym Gyms.ecore"
+    city="Porto"
+    capacity="100">
+  <machines
+      model="H01"
+      name="Chest Press"
+      brand="Hammer"/>
+  <machines
+      model="N01"
+      name="Hack Squat"
+      brand="Nautilus"/>
+  <machines
+      model="T01"
+      name="Horizontal Row"
+      brand="Technogym"/>
+  <plans tier="Standard"
+      price="30"
+      daysPerWeek="5"
+      clients="//@people.2"/>
+  <plans tier="Premium"
+      price="40"
+      daysPerWeek="7"
+      clients="//@people.3"/>
+  <people xsi:type="gym:Staff"
+      name="Diogo"
+      dateOfBirth="2002-01-01T00:00:00.000+0000"
+      email="diogo1234@gmail.com"
+      phoneNumber="999888777"/>
+  <people xsi:type="gym:Staff"
+      name="Rui"
+      dateOfBirth="2002-01-01T00:00:00.000+0000"
+      email="rui1234@gmail.com"
+      phoneNumber="999777666"
+      role="Receptionist"/>
+  <people xsi:type="gym:Client"
+      name="Henrique"
+      dateOfBirth="2002-01-01T00:00:00.000+0000"
+      email="henrique1234@gmail.com"
+      phoneNumber="999666555"
+      plan="//@plans.0"/>
+  <people xsi:type="gym:Client"
+      name="Tiago"
+      dateOfBirth="2002-01-01T00:00:00.000+0000"
+      email="tiago1234@gmail.com"
+      phoneNumber="999555444"
+      plan="//@plans.1"/>
+</gym:Gym>
