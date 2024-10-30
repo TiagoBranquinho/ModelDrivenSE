@@ -4,8 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:gym="http://www.example.org/mongoGym"
     xsi:schemaLocation="http://www.example.org/mongoGym MongoGyms.ecore">
-  <documents
-      id="1">
+  <documents>
     <fields
         name="city"
         valueString="Porto"/>
@@ -15,8 +14,7 @@
     <fields
         name="machines">
       <valueArray>
-        <documentValues
-            id="2">
+        <documentValues>
           <fields
               name="model"
               valueString="H01"/>
@@ -27,8 +25,7 @@
               name="brand"
               valueString="Hammer"/>
         </documentValues>
-        <documentValues
-            id="3">
+        <documentValues>
           <fields
               name="model"
               valueString="N01"/>
@@ -43,8 +40,7 @@
     </fields>
     <fields
         name="plan">
-      <valueDocument
-          id="4">
+      <valueDocument>
         <fields
             name="tier"
             valueString="Standard"/>
