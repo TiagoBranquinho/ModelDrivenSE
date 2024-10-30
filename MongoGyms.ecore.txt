@@ -1,0 +1,69 @@
+import ecore : 'http://www.eclipse.org/emf/2002/Ecore';
+
+package mongoGyms : gym = 'http://www.example.org/mongoGym'
+{
+    class MongoCollection
+    {
+        property documents : MongoDocument[*] { composes };
+    }
+    
+    class MongoDocument
+    {
+        attribute id : Integer; 
+        
+        property fields : MongoField[*] { composes };
+        
+        invariant uniqueFieldNames: fields->isUnique(f | f.name);
+    }
+
+    class MongoArray
+    {
+        property values : String[*] { composes }; 
+        property integerValues : Integer[*] { composes }; 
+        property documentValues : MongoDocument[*] { composes };
+        
+        invariant singleType:
+        	(values->isEmpty() and integerValues->isEmpty() and documentValues->isEmpty()) or
+            (values->notEmpty() and integerValues->isEmpty() and documentValues->isEmpty()) or
+            (integerValues->notEmpty() and values->isEmpty() and documentValues->isEmpty()) or
+            (documentValues->notEmpty() and values->isEmpty() and integerValues->isEmpty());
+    }
+
+    class MongoField
+    {
+        attribute name : String[1]; 
+        attribute valueString : String[?]; 
+        attribute valueInteger : Integer[?]; 
+        
+        property valueArray : MongoArray[?] { composes };
+        property valueDocument : MongoDocument[?] { composes }; 
+        
+        invariant oneValueRequired:
+            valueString <> null or 
+            valueInteger <> null or 
+            valueArray <> null or
+            valueDocument <> null;
+        
+        invariant singleValue:
+            (valueString <> null and valueInteger = null and valueArray = null and valueDocument = null) or 
+            (valueInteger <> null and valueString = null and valueArray = null and valueDocument = null) or
+            (valueArray <> null and valueString = null and valueInteger = null and valueDocument = null) or
+            (valueDocument <> null and valueString = null and valueInteger = null and valueArray = null);
+    }
+
+    class Gym extends MongoCollection
+    {
+    }
+
+    class Machine extends MongoCollection
+    {
+    }
+
+    class Plan extends MongoCollection
+    {
+    }
+
+    class Person extends MongoCollection
+    {
+    }
+}
