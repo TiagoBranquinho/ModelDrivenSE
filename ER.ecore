@@ -10,7 +10,26 @@
     <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
     <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
   </eAnnotations>
+  <eClassifiers xsi:type="ecore:EEnum" name="AttributeType">
+    <eLiterals name="string"/>
+    <eLiterals name="boolean"/>
+    <eLiterals name="float"/>
+    <eLiterals name="integer"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CardinalityType">
+    <eLiterals name="OneToOne"/>
+    <eLiterals name="OneToMany"/>
+    <eLiterals name="ManyToOne"/>
+    <eLiterals name="ManyToMany"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Diagram">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="uniqueEntityNames validRelationships"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="uniqueEntityNames" value="entities->isUnique(e | e.name)"/>
+      <details key="validRelationships" value="relationships->forAll(r | entities->includes(r.sourceEntity) and entities->includes(r.targetEntity))"/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="entities" ordered="false"
         upperBound="-1" eType="#//Entity" containment="true">
@@ -18,13 +37,20 @@
         <details key="nullFree" value="false"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relationships" ordered="false"
+        upperBound="-1" eType="#//Relationship" containment="true">
+      <eAnnotations source="http://www.eclipse.org/OCL/Collection">
+        <details key="nullFree" value="false"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Entity">
     <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-      <details key="constraints" value="uniqueAttributeNames"/>
+      <details key="constraints" value="uniqueAttributeNames primaryKeyIsAttribute"/>
     </eAnnotations>
     <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
       <details key="uniqueAttributeNames" value="attributes->isUnique(a | a.name)"/>
+      <details key="primaryKeyIsAttribute" value="attributes->includes(primaryKey)"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" ordered="false"
@@ -35,36 +61,25 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="primaryKey" lowerBound="1"
         eType="#//Attribute"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="relationships" ordered="false"
-        upperBound="-1" eType="#//Relationship" containment="true">
-      <eAnnotations source="http://www.eclipse.org/OCL/Collection">
-        <details key="nullFree" value="false"/>
-      </eAnnotations>
-    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Attribute">
     <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-      <details key="constraints" value="validType"/>
+      <details key="constraints" value="validValue"/>
     </eAnnotations>
     <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
-      <details key="validType" value="type = 'String' or type = 'Integer' or type = 'Boolean' or type = 'Float'"/>
+      <details key="validValue" value="&#xA;&#x9;&#x9;&#x9;(type = AttributeType::string and value.oclIsTypeOf(String)) or&#xA;&#x9;&#x9;&#x9;(type = AttributeType::integer and value.matches('-?\\d+')) or&#xA;&#x9;&#x9;&#x9;(type = AttributeType::float and value.matches('-?\\d+(\\.\\d+)?')) or&#xA;&#x9;&#x9;&#x9;(type = AttributeType::boolean and (value = 'true' or value = 'false'))"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//AttributeType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Relationship">
-    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-      <details key="constraints" value="validCardinality"/>
-    </eAnnotations>
-    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
-      <details key="validCardinality" value="cardinality = '1:1' or cardinality = '1:N' or cardinality = 'N:1' or cardinality = 'N:M'"/>
-    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cardinality" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        eType="#//CardinalityType"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sourceEntity" lowerBound="1"
-        eType="#//Entity" containment="true"/>
+        eType="#//Entity"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="targetEntity" lowerBound="1"
-        eType="#//Entity" containment="true"/>
+        eType="#//Entity"/>
   </eClassifiers>
 </ecore:EPackage>
