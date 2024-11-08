@@ -1,11 +1,13 @@
 import ecore : 'http://www.eclipse.org/emf/2002/Ecore';
 
-package mongo : mongo = 'http://www.example.org/mongo'
+package mongo : mdb = 'http://www.example.org/mongo'
 {
 	class MongoDB
 	{
 		attribute name : String[1];
 		property collections : MongoCollection[*] { composes };
+
+		invariant uniqueDocumentIds: collections.documents->collect(d | d.id)->isUnique(id | id);
 	}
 
 	class MongoCollection
@@ -16,79 +18,28 @@ package mongo : mongo = 'http://www.example.org/mongo'
 
 	class MongoDocument
 	{
+		attribute id : Integer[1]; 
 		property fields : MongoField[*] { composes };
 		invariant uniqueFieldNames: fields->isUnique(f | f.name);
-		invariant maxDocumentNestingDepth:
-			let nestedDepth : Integer = 
-				if fields->exists(f | f.valueDocument <> null or f.valueArray <> null) then
-					1 + fields->collect(f |
-						if f.valueDocument <> null then
-							let innerDepths = f.valueDocument.fields->collect(nf | if nf.valueDocument <> null then 1 else 0 endif) in
-							if innerDepths->isEmpty() then 0 else 1 + innerDepths->max() endif
-						else 
-							if f.valueArray <> null then
-								let arrayDepths = f.valueArray.documentValues->collect(dv | 
-									let dvDepths = dv.fields->collect(nf | if nf.valueDocument <> null then 1 else 0 endif) in
-									if dvDepths->isEmpty() then 0 else 1 + dvDepths->max() endif
-								) in
-								if arrayDepths->isEmpty() then 0 else 1 + arrayDepths->max() endif
-							else
-								0
-							endif
-						endif
-					)->max()
-				else
-					1
-				endif
-			in
-			nestedDepth <= 100;
 	}
 
 	class MongoArray
 	{
 		attribute values : String[*];
 		attribute integerValues : Integer[*];
+		attribute floatValues : Real[*];
+		property referenceDocuments : MongoDocument[*]; 
 		property arrayValues : MongoArray[*] { composes };
 		property documentValues : MongoDocument[*] { composes };
+		
 		invariant singleType:
-	    	(values->isEmpty() and integerValues->isEmpty() and documentValues->isEmpty() and arrayValues->isEmpty()) or
-	        (values->notEmpty() and integerValues->isEmpty() and documentValues->isEmpty() and arrayValues->isEmpty()) or
-	        (integerValues->notEmpty() and values->isEmpty() and documentValues->isEmpty() and arrayValues->isEmpty()) or
-	        (arrayValues->notEmpty() and values->isEmpty() and integerValues->isEmpty() and documentValues->isEmpty()) or
-	        (documentValues->notEmpty() and values->isEmpty() and integerValues->isEmpty() and arrayValues->isEmpty());
-		invariant maxArrayNestingDepth:
-			let nestedDepth : Integer =
-				if arrayValues->isEmpty() then
-					1
-				else
-					1 + arrayValues->collect(innerArr | 
-						if innerArr.arrayValues->isEmpty() then
-							1
-						else
-							1 + innerArr.arrayValues->collect(innerInnerArr | 
-								if innerInnerArr.arrayValues->isEmpty() then
-									1
-								else
-									1 + innerInnerArr.arrayValues->collect(deepArr | 
-										if deepArr.arrayValues->isEmpty() then
-											1
-										else
-											1 + deepArr.arrayValues->collect(finalArr | 
-												if finalArr.arrayValues->isEmpty() then
-													1
-												else
-													1 + finalArr.arrayValues->size()
-												endif
-											)->max()
-										endif
-									)->max()
-								endif
-							)->max()
-						endif
-					)->max()
-				endif
-			in
-			nestedDepth <= 100;
+			(values->isEmpty() and integerValues->isEmpty() and floatValues->isEmpty() and documentValues->isEmpty() and arrayValues->isEmpty() and referenceDocuments->isEmpty()) or
+			(values->notEmpty() and integerValues->isEmpty() and floatValues->isEmpty() and documentValues->isEmpty() and arrayValues->isEmpty() and referenceDocuments->isEmpty()) or
+			(integerValues->notEmpty() and values->isEmpty() and floatValues->isEmpty() and documentValues->isEmpty() and arrayValues->isEmpty() and referenceDocuments->isEmpty()) or
+			(floatValues->notEmpty() and values->isEmpty() and integerValues->isEmpty() and documentValues->isEmpty() and arrayValues->isEmpty() and referenceDocuments->isEmpty()) or
+			(arrayValues->notEmpty() and values->isEmpty() and integerValues->isEmpty() and floatValues->isEmpty() and documentValues->isEmpty() and referenceDocuments->isEmpty()) or
+			(documentValues->notEmpty() and values->isEmpty() and integerValues->isEmpty() and floatValues->isEmpty() and arrayValues->isEmpty() and referenceDocuments->isEmpty()) or
+			(referenceDocuments->notEmpty() and values->isEmpty() and integerValues->isEmpty() and floatValues->isEmpty() and documentValues->isEmpty() and arrayValues->isEmpty());
 	}
 
 	class MongoField
@@ -96,17 +47,25 @@ package mongo : mongo = 'http://www.example.org/mongo'
 		attribute name : String[1];
 		attribute valueString : String[?];
 		attribute valueInteger : Integer[?];
+		attribute valueFloat : Real[?];
+		property referenceDocument : MongoDocument[?]; 
 		property valueArray : MongoArray[?] { composes };
 		property valueDocument : MongoDocument[?] { composes };
+		
 		invariant oneValueRequired:
-            valueString <> null or 
-            valueInteger <> null or 
-            valueArray <> null or
-            valueDocument <> null;
+			valueString <> null or 
+			valueInteger <> null or 
+			valueFloat <> null or
+			referenceDocument <> null or
+			valueArray <> null or
+			valueDocument <> null;
+
 		invariant singleValue:
-            (valueString <> null and valueInteger = null and valueArray = null and valueDocument = null) or 
-            (valueInteger <> null and valueString = null and valueArray = null and valueDocument = null) or
-            (valueArray <> null and valueString = null and valueInteger = null and valueDocument = null) or
-            (valueDocument <> null and valueString = null and valueInteger = null and valueArray = null);
+			(valueString <> null and valueInteger = null and valueFloat = null and referenceDocument = null and valueArray = null and valueDocument = null) or 
+			(valueInteger <> null and valueString = null and valueFloat = null and referenceDocument = null and valueArray = null and valueDocument = null) or
+			(valueFloat <> null and valueString = null and valueInteger = null and referenceDocument = null and valueArray = null and valueDocument = null) or
+			(referenceDocument <> null and valueString = null and valueInteger = null and valueFloat = null and valueArray = null and valueDocument = null) or
+			(valueArray <> null and valueString = null and valueInteger = null and valueFloat = null and referenceDocument = null and valueDocument = null) or
+			(valueDocument <> null and valueString = null and valueInteger = null and valueFloat = null and referenceDocument = null and valueArray = null);
 	}
 }
