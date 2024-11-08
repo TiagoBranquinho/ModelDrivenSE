@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mongo" nsURI="http://www.example.org/mongo" nsPrefix="mdb">
+  <eAnnotations source="http://www.eclipse.org/OCL/Import">
+    <details key="ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
+  </eAnnotations>
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="MongoDB">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="uniqueDocumentIds"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="uniqueDocumentIds" value="collections.documents->collect(d | d.id)->isUnique(id | id)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="collections" ordered="false"
+        upperBound="-1" eType="#//MongoCollection" containment="true">
+      <eAnnotations source="http://www.eclipse.org/OCL/Collection">
+        <details key="nullFree" value="false"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MongoCollection">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="documents" ordered="false"
+        upperBound="-1" eType="#//MongoDocument" containment="true">
+      <eAnnotations source="http://www.eclipse.org/OCL/Collection">
+        <details key="nullFree" value="false"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MongoDocument">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="uniqueFieldNames"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="uniqueFieldNames" value="fields->isUnique(f | f.name)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fields" ordered="false"
+        upperBound="-1" eType="#//MongoField" containment="true">
+      <eAnnotations source="http://www.eclipse.org/OCL/Collection">
+        <details key="nullFree" value="false"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MongoArray">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="singleType"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="singleType" value="&#xA;&#x9;&#x9;&#x9;(values->isEmpty() and integerValues->isEmpty() and floatValues->isEmpty() and documentValues->isEmpty() and arrayValues->isEmpty() and referenceDocuments->isEmpty()) or&#xA;&#x9;&#x9;&#x9;(values->notEmpty() and integerValues->isEmpty() and floatValues->isEmpty() and documentValues->isEmpty() and arrayValues->isEmpty() and referenceDocuments->isEmpty()) or&#xA;&#x9;&#x9;&#x9;(integerValues->notEmpty() and values->isEmpty() and floatValues->isEmpty() and documentValues->isEmpty() and arrayValues->isEmpty() and referenceDocuments->isEmpty()) or&#xA;&#x9;&#x9;&#x9;(floatValues->notEmpty() and values->isEmpty() and integerValues->isEmpty() and documentValues->isEmpty() and arrayValues->isEmpty() and referenceDocuments->isEmpty()) or&#xA;&#x9;&#x9;&#x9;(arrayValues->notEmpty() and values->isEmpty() and integerValues->isEmpty() and floatValues->isEmpty() and documentValues->isEmpty() and referenceDocuments->isEmpty()) or&#xA;&#x9;&#x9;&#x9;(documentValues->notEmpty() and values->isEmpty() and integerValues->isEmpty() and floatValues->isEmpty() and arrayValues->isEmpty() and referenceDocuments->isEmpty()) or&#xA;&#x9;&#x9;&#x9;(referenceDocuments->notEmpty() and values->isEmpty() and integerValues->isEmpty() and floatValues->isEmpty() and documentValues->isEmpty() and arrayValues->isEmpty())"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="values" ordered="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/OCL/Collection">
+        <details key="nullFree" value="false"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="integerValues" ordered="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger">
+      <eAnnotations source="http://www.eclipse.org/OCL/Collection">
+        <details key="nullFree" value="false"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="floatValues" ordered="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal">
+      <eAnnotations source="http://www.eclipse.org/OCL/Collection">
+        <details key="nullFree" value="false"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referenceDocuments" ordered="false"
+        upperBound="-1" eType="#//MongoDocument">
+      <eAnnotations source="http://www.eclipse.org/OCL/Collection">
+        <details key="nullFree" value="false"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arrayValues" ordered="false"
+        upperBound="-1" eType="#//MongoArray" containment="true">
+      <eAnnotations source="http://www.eclipse.org/OCL/Collection">
+        <details key="nullFree" value="false"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="documentValues" ordered="false"
+        upperBound="-1" eType="#//MongoDocument" containment="true">
+      <eAnnotations source="http://www.eclipse.org/OCL/Collection">
+        <details key="nullFree" value="false"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MongoField">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="oneValueRequired singleValue"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="oneValueRequired" value="&#xA;&#x9;&#x9;&#x9;valueString &lt;> null or &#xA;&#x9;&#x9;&#x9;valueInteger &lt;> null or &#xA;&#x9;&#x9;&#x9;valueFloat &lt;> null or&#xA;&#x9;&#x9;&#x9;referenceDocument &lt;> null or&#xA;&#x9;&#x9;&#x9;valueArray &lt;> null or&#xA;&#x9;&#x9;&#x9;valueDocument &lt;> null"/>
+      <details key="singleValue" value="&#xA;&#x9;&#x9;&#x9;(valueString &lt;> null and valueInteger = null and valueFloat = null and referenceDocument = null and valueArray = null and valueDocument = null) or &#xA;&#x9;&#x9;&#x9;(valueInteger &lt;> null and valueString = null and valueFloat = null and referenceDocument = null and valueArray = null and valueDocument = null) or&#xA;&#x9;&#x9;&#x9;(valueFloat &lt;> null and valueString = null and valueInteger = null and referenceDocument = null and valueArray = null and valueDocument = null) or&#xA;&#x9;&#x9;&#x9;(referenceDocument &lt;> null and valueString = null and valueInteger = null and valueFloat = null and valueArray = null and valueDocument = null) or&#xA;&#x9;&#x9;&#x9;(valueArray &lt;> null and valueString = null and valueInteger = null and valueFloat = null and referenceDocument = null and valueDocument = null) or&#xA;&#x9;&#x9;&#x9;(valueDocument &lt;> null and valueString = null and valueInteger = null and valueFloat = null and referenceDocument = null and valueArray = null)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="valueString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="valueInteger" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="valueFloat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referenceDocument" eType="#//MongoDocument"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="valueArray" eType="#//MongoArray"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="valueDocument" eType="#//MongoDocument"
+        containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

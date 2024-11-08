@@ -10,18 +10,6 @@
     <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
     <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
   </eAnnotations>
-  <eClassifiers xsi:type="ecore:EEnum" name="AttributeType">
-    <eLiterals name="string"/>
-    <eLiterals name="boolean"/>
-    <eLiterals name="float"/>
-    <eLiterals name="integer"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="CardinalityType">
-    <eLiterals name="OneToOne"/>
-    <eLiterals name="OneToMany"/>
-    <eLiterals name="ManyToOne"/>
-    <eLiterals name="ManyToMany"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Diagram">
     <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
       <details key="constraints" value="uniqueEntityNames validRelationships"/>
@@ -39,6 +27,18 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="relationships" ordered="false"
         upperBound="-1" eType="#//Relationship" containment="true">
+      <eAnnotations source="http://www.eclipse.org/OCL/Collection">
+        <details key="nullFree" value="false"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entityInstances" ordered="false"
+        upperBound="-1" eType="#//EntityInstance" containment="true">
+      <eAnnotations source="http://www.eclipse.org/OCL/Collection">
+        <details key="nullFree" value="false"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relationshipInstances"
+        ordered="false" upperBound="-1" eType="#//RelationshipInstance" containment="true">
       <eAnnotations source="http://www.eclipse.org/OCL/Collection">
         <details key="nullFree" value="false"/>
       </eAnnotations>
@@ -62,15 +62,41 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="primaryKey" lowerBound="1"
         eType="#//Attribute"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EntityInstance">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="uniqueAttributeInstances"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="uniqueAttributeInstances" value="attributeInstances->isUnique(ai | ai.attribute)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entity" lowerBound="1"
+        eType="#//Entity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeInstances" ordered="false"
+        upperBound="-1" eType="#//AttributeInstance" containment="true">
+      <eAnnotations source="http://www.eclipse.org/OCL/Collection">
+        <details key="nullFree" value="false"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Attribute">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//AttributeType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AttributeType">
+    <eLiterals name="string"/>
+    <eLiterals name="boolean"/>
+    <eLiterals name="float"/>
+    <eLiterals name="integer"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeInstance">
     <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
       <details key="constraints" value="validValue"/>
     </eAnnotations>
     <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
-      <details key="validValue" value="&#xA;&#x9;&#x9;&#x9;(type = AttributeType::string and (value.oclIsUndefined() or value.oclIsTypeOf(String))) or&#xA;&#x9;&#x9;&#x9;(type = AttributeType::integer and (value.oclIsUndefined() or value.matches('-?\\d+'))) or&#xA;&#x9;&#x9;&#x9;(type = AttributeType::float and (value.oclIsUndefined() or value.matches('-?\\d+(\\.\\d+)?'))) or&#xA;&#x9;&#x9;&#x9;(type = AttributeType::boolean and (value.oclIsUndefined() or (value = 'true' or value = 'false')))"/>
+      <details key="validValue" value="&#xA;&#x9;        (attribute.type = AttributeType::string and (value.oclIsUndefined() or value.oclIsTypeOf(String))) or&#xA;&#x9;        (attribute.type = AttributeType::integer and (value.oclIsUndefined() or value.matches('-?\\d+'))) or&#xA;&#x9;        (attribute.type = AttributeType::float and (value.oclIsUndefined() or value.matches('-?\\d+(\\.\\d+)?'))) or&#xA;&#x9;        (attribute.type = AttributeType::boolean and (value.oclIsUndefined() or (value = 'true' or value = 'false')))"/>
     </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//AttributeType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" lowerBound="1"
+        eType="#//Attribute"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Relationship">
@@ -81,5 +107,25 @@
         eType="#//Entity"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="targetEntity" lowerBound="1"
         eType="#//Entity"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CardinalityType">
+    <eLiterals name="OneToOne"/>
+    <eLiterals name="OneToMany"/>
+    <eLiterals name="ManyToOne"/>
+    <eLiterals name="ManyToMany"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RelationshipInstance">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="validInstances"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="validInstances" value="&#xA;&#x9;&#x9;    -- OneToOne relationship: sourceInstance and targetInstance should each be connected to exactly one other&#xA;&#x9;&#x9;    (relationship.cardinality = CardinalityType::OneToOne and&#xA;&#x9;&#x9;     RelationshipInstance.allInstances()->select(r | r.relationship = relationship and r.sourceInstance = sourceInstance)->size() = 1 and&#xA;&#x9;&#x9;     RelationshipInstance.allInstances()->select(r | r.relationship = relationship and r.targetInstance = targetInstance)->size() = 1) or&#xA;&#x9;&#x9;&#xA;&#x9;&#x9;    -- OneToMany relationship: sourceInstance can have multiple targetInstances, but each targetInstance should only have one sourceInstance&#xA;&#x9;&#x9;    (relationship.cardinality = CardinalityType::OneToMany and&#xA;&#x9;&#x9;     RelationshipInstance.allInstances()->select(r | r.relationship = relationship and r.sourceInstance = sourceInstance)->size() >= 1 and&#xA;&#x9;&#x9;     RelationshipInstance.allInstances()->select(r | r.relationship = relationship and r.targetInstance = targetInstance)->size() = 1) or&#xA;&#x9;&#x9;&#xA;&#x9;&#x9;    -- ManyToOne relationship: targetInstance can have multiple sourceInstances, but each sourceInstance should only have one targetInstance&#xA;&#x9;&#x9;    (relationship.cardinality = CardinalityType::ManyToOne and&#xA;&#x9;&#x9;     RelationshipInstance.allInstances()->select(r | r.relationship = relationship and r.sourceInstance = sourceInstance)->size() = 1 and&#xA;&#x9;&#x9;     RelationshipInstance.allInstances()->select(r | r.relationship = relationship and r.targetInstance = targetInstance)->size() >= 1) or&#xA;&#x9;&#x9;&#xA;&#x9;&#x9;    -- ManyToMany relationship: both sourceInstance and targetInstance can have multiple connections with each other&#xA;&#x9;&#x9;    (relationship.cardinality = CardinalityType::ManyToMany and&#xA;&#x9;&#x9;     RelationshipInstance.allInstances()->select(r | r.relationship = relationship and r.sourceInstance = sourceInstance)->size() >= 1 and&#xA;&#x9;&#x9;     RelationshipInstance.allInstances()->select(r | r.relationship = relationship and r.targetInstance = targetInstance)->size() >= 1)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relationship" lowerBound="1"
+        eType="#//Relationship"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceInstance" lowerBound="1"
+        eType="#//EntityInstance"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetInstance" lowerBound="1"
+        eType="#//EntityInstance"/>
   </eClassifiers>
 </ecore:EPackage>
