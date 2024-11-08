@@ -21,7 +21,8 @@
     <attributes
         name="clientName"/>
     <attributes
-        name="clientDateOfBirth"/>
+        name="clientDateOfBirth"
+        type="date"/>
     <attributes
         name="clientEmail"/>
     <attributes

@@ -59,6 +59,8 @@
     <eLiterals name="boolean"/>
     <eLiterals name="float"/>
     <eLiterals name="integer"/>
+    <eLiterals name="date"/>
+    <eLiterals name="object"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Relationship">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
