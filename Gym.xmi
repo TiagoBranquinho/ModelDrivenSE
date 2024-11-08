@@ -1,52 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gym:Gym xmi:version="2.0"
+<erd:Diagram
+    xmi:version="2.0"
     xmlns:xmi="http://www.omg.org/XMI"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:gym="http://www.example.org/gym"
-    xsi:schemaLocation="http://www.example.org/gym Gyms.ecore"
-    city="Porto"
-    capacity="100">
-  <machines
-      model="H01"
-      name="Chest Press"
-      brand="Hammer"/>
-  <machines
-      model="N01"
-      name="Hack Squat"
-      brand="Nautilus"/>
-  <machines
-      model="T01"
-      name="Horizontal Row"
-      brand="Technogym"/>
-  <plans tier="Standard"
-      price="30"
-      daysPerWeek="5"
-      clients="//@people.2"/>
-  <plans tier="Premium"
-      price="40"
-      daysPerWeek="7"
-      clients="//@people.3"/>
-  <people xsi:type="gym:Staff"
-      name="Diogo"
-      dateOfBirth="2002-01-01T00:00:00.000+0000"
-      email="diogo1234@gmail.com"
-      phoneNumber="999888777"/>
-  <people xsi:type="gym:Staff"
-      name="Rui"
-      dateOfBirth="2002-01-01T00:00:00.000+0000"
-      email="rui1234@gmail.com"
-      phoneNumber="999777666"
-      role="Receptionist"/>
-  <people xsi:type="gym:Client"
-      name="Henrique"
-      dateOfBirth="2002-01-01T00:00:00.000+0000"
-      email="henrique1234@gmail.com"
-      phoneNumber="999666555"
-      plan="//@plans.0"/>
-  <people xsi:type="gym:Client"
-      name="Tiago"
-      dateOfBirth="2002-01-01T00:00:00.000+0000"
-      email="tiago1234@gmail.com"
-      phoneNumber="999555444"
-      plan="//@plans.1"/>
-</gym:Gym>
+    xmlns:erd="http://www.example.org/entityRelation"
+    xsi:schemaLocation="http://www.example.org/entityRelation ER.ecore"
+    name="GymER">
+  <entities
+      name="Gym"
+      primaryKey="//@entities.0/@attributes.0">
+    <attributes
+        name="city"/>
+    <attributes
+        name="capacity"
+        type="integer"/>
+  </entities>
+  <entities
+      name="Client"
+      primaryKey="//@entities.1/@attributes.2">
+    <attributes
+        name="clientName"/>
+    <attributes
+        name="clientDateOfBirth"/>
+    <attributes
+        name="clientEmail"/>
+    <attributes
+        name="clientPhoneNumber"/>
+  </entities>
+  <entities
+      name="Staff"
+      primaryKey="//@entities.2/@attributes.3">
+    <attributes
+        name="staffName"/>
+    <attributes
+        name="role"/>
+    <attributes
+        name="staffDateOfBirth"/>
+    <attributes
+        name="staffEmail"/>
+    <attributes
+        name="staffPhoneNumber"/>
+  </entities>
+  <entities
+      name="Plan"
+      primaryKey="//@entities.3/@attributes.3">
+    <attributes
+        name="tier"/>
+    <attributes
+        name="price"
+        type="float"/>
+    <attributes
+        name="daysPerWeek"
+        type="integer"/>
+    <attributes
+        name="planID"
+        type="integer"/>
+  </entities>
+  <entities
+      name="Machine"
+      primaryKey="//@entities.4/@attributes.1">
+    <attributes
+        name="machineName"/>
+    <attributes
+        name="model"/>
+    <attributes
+        name="brand"/>
+  </entities>
+  <relationships
+      name="clientGym"
+      cardinality="ManyToOne"
+      sourceEntity="//@entities.1"
+      targetEntity="//@entities.0"/>
+  <relationships
+      name="staffGym"
+      cardinality="ManyToOne"
+      sourceEntity="//@entities.2"
+      targetEntity="//@entities.0"/>
+  <relationships
+      name="gymPlan"
+      cardinality="OneToMany"
+      sourceEntity="//@entities.0"
+      targetEntity="//@entities.3"/>
+  <relationships
+      name="clientPlan"
+      cardinality="ManyToOne"
+      sourceEntity="//@entities.1"
+      targetEntity="//@entities.3"/>
+  <relationships
+      name="gymMachine"
+      cardinality="OneToMany"
+      sourceEntity="//@entities.0"
+      targetEntity="//@entities.4"/>
+</erd:Diagram>
