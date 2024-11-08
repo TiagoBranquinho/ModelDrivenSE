@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<erd:Diagram
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:erd="http://www.example.org/entityRelation"
+    xsi:schemaLocation="http://www.example.org/entityRelation ER.ecore"
+    name="GymER_Invalid">
+  
+  <!-- Duplicate Entity Name (violates uniqueEntityNames) -->
+  <entities
+      name="Client"
+      primaryKey="//@entities.0/@attributes.0">
+    <attributes
+        name="clientName"/>
+    <attributes
+        name="clientDateOfBirth"/>
+    <attributes
+        name="clientEmail"/>
+    <attributes
+        name="clientPhoneNumber"/>
+  </entities>
+  
+  <entities
+      name="Client"
+      primaryKey="//@entities.1/@attributes.1">
+    <attributes
+        name="id"
+        type="integer"/>
+    <attributes
+        name="clientName"/>
+  </entities>
+  
+  <entities
+      name="Gym"
+      primaryKey="//@entities.2/@attributes.0">
+    <attributes
+        name="city"/>
+    <attributes
+        name="capacity"
+        type="integer"/>
+  </entities>
+  
+  <entities
+      name="Plan"
+      primaryKey="//@entities.2/@attributes.1">
+    <attributes
+        name="tier"/>
+    <attributes
+        name="price"
+        type="float"/>
+    <attributes
+        name="daysPerWeek"
+        type="integer"/>
+  </entities>
+  
+  <entities
+      name="Machine"
+      primaryKey="//@entities.4/@attributes.1">
+    <attributes
+        name="machineName"/>
+    <attributes
+        name="model"/>
+    <attributes
+        name="brand"/>
+  </entities>
+  
+  <!-- Invalid Relationship: (violates validRelationships) -->
+  <relationships
+      name="gymMachine"
+      cardinality="OneToMany"
+      sourceEntity="//@entities.2"/>
+
+  <relationships
+      name="clientGym"
+      cardinality="ManyToOne"
+      sourceEntity="//@entities.0"
+      targetEntity="//@entities.2"/>
+</erd:Diagram>
