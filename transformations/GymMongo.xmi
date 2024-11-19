@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<mdb:MongoDB xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:mdb="http://www.example.org/mongo" name="GymER">
+<mdb:MongoDB xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:mdb="http://www.example.org/mongo" name="GymERMongo">
   <collections name="Gym">
     <schema name="GymSchema">
       <fields name="city" isIndexed="true"/>
       <fields name="capacity" type="integer"/>
+      <fields name="Plan" type="object" isArray="true">
+        <objectSchema name="PlanSchema">
+          <fields name="tier"/>
+          <fields name="price" type="float"/>
+          <fields name="daysPerWeek" type="integer"/>
+          <fields name="planID" type="integer" isIndexed="true"/>
+        </objectSchema>
+      </fields>
+      <fields name="Machine" type="object" isArray="true">
+        <objectSchema name="MachineSchema">
+          <fields name="machineName"/>
+          <fields name="model" isIndexed="true"/>
+          <fields name="brand"/>
+        </objectSchema>
+      </fields>
     </schema>
   </collections>
   <collections name="Client">
@@ -12,6 +27,8 @@
       <fields name="clientDateOfBirth" type="date"/>
       <fields name="clientEmail" isIndexed="true"/>
       <fields name="clientPhoneNumber"/>
+      <fields name="Gym" type="objectID" collectionReference="//@collections.0"/>
+      <fields name="Plan" type="objectID" collectionReference="//@collections.3"/>
     </schema>
   </collections>
   <collections name="Staff">
@@ -21,6 +38,7 @@
       <fields name="staffDateOfBirth" type="date"/>
       <fields name="staffEmail" isIndexed="true"/>
       <fields name="staffPhoneNumber"/>
+      <fields name="Gym" type="objectID" collectionReference="//@collections.0"/>
     </schema>
   </collections>
   <collections name="Plan">

@@ -18,7 +18,8 @@
           type="integer"/>
       <fields
           name="plan"
-          type="object">
+          type="object"
+          isArray="true">
         <objectSchema
             name="planSchema">
           <fields
@@ -36,7 +37,8 @@
       </fields>
       <fields
           name="machine"
-          type="object">
+          type="object"
+          isArray="true">
         <objectSchema
             name="machineSchema">
           <fields
