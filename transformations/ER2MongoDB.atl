@@ -65,9 +65,9 @@ lazy rule RelationshipToMongoField {
         m: MongoDB!MongoField (
             name <- r.targetEntity.name,
             type <- if r.cardinality = #OneToOne or r.cardinality = #OneToMany then 
-                        'object' 
+                        #object 
                     else 
-                        'objectID'
+                        #objectID
 					endif,
             isRequired <- false,
             isIndexed <- false,
