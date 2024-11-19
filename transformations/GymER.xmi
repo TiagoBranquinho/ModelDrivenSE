@@ -36,7 +36,8 @@
     <attributes
         name="role"/>
     <attributes
-        name="staffDateOfBirth"/>
+        name="staffDateOfBirth"
+        type="date"/>
     <attributes
         name="staffEmail"/>
     <attributes

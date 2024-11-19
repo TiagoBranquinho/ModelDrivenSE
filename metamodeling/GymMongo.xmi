@@ -56,7 +56,8 @@
       <fields
           name="clientName"/>
       <fields
-          name="clientDateOfBirth"/>
+          name="clientDateOfBirth"
+          type="date"/>
       <fields
           name="clientEmail"
           isIndexed="true"/>
@@ -81,7 +82,8 @@
       <fields
           name="role"/>
       <fields
-          name="staffDateOfBirth"/>
+          name="staffDateOfBirth"
+          type="date"/>
       <fields
           name="staffEmail"
           isIndexed="true"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.m2m.atl.adt.launching.atlTransformation">
-    <stringAttribute key="ATL File Name" value="/TACS_2/ER2Mongo.atl"/>
+    <stringAttribute key="ATL File Name" value="/TACS_2/ER2MongoDB.atl"/>
     <stringAttribute key="ATL VM" value="EMF-specific VM"/>
     <stringAttribute key="ATL_COMPILER" value="atl2006"/>
     <booleanAttribute key="IS_REFINING" value="false"/>
@@ -40,9 +40,8 @@
         <mapEntry key="ER" value="/TACS_2/ER.ecore"/>
         <mapEntry key="IN" value="/TACS_2/GymER.xmi"/>
         <mapEntry key="MongoDB" value="/TACS_2/MongoDB.ecore"/>
-        <mapEntry key="OUT" value="/TACS_2/GymMongoATL.xmi"/>
+        <mapEntry key="OUT" value="/TACS_2/GymMongo.xmi"/>
     </mapAttribute>
     <listAttribute key="Superimpose"/>
-    <stringAttribute key="bad_container_name" value="\TACS\m"/>
     <booleanAttribute key="org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING" value="false"/>
 </launchConfiguration>

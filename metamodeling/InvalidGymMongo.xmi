@@ -6,7 +6,6 @@
     xmlns:mdb="http://www.example.org/mongo"
     xsi:schemaLocation="http://www.example.org/mongo MongoDB.ecore"
     name="GymMongoInvalid">
-  <!-- Error 1: Duplicate collection names -->
   <collections
       name="Gym">
     <schema
@@ -14,10 +13,8 @@
       <fields
           name="city"
           isIndexed="true"/>
-      <!-- Error 2: Invalid type specified for capacity (should be integer, not string) -->
       <fields
-          name="capacity"
-          type="string"/>
+          name="capacity"/>
       <fields
           name="plan"
           type="object">
@@ -31,13 +28,11 @@
           <fields
               name="daysPerWeek"
               type="integer"/>
-          <!-- Error 3: Duplicate field name "planID" -->
           <fields
               name="planID"
               type="integer"/>
           <fields
-              name="planID"
-              type="string"/>
+              name="planID"/>
         </objectSchema>
       </fields>
       <fields
@@ -55,8 +50,6 @@
       </fields>
     </schema>
   </collections>
-  
-  <!-- Error 4: Duplicate collection names (same as "Gym" above) -->
   <collections
       name="Gym">
     <schema
@@ -65,7 +58,6 @@
           name="location"/>
     </schema>
   </collections>
-
   <collections
       name="Client">
     <schema
@@ -73,24 +65,22 @@
       <fields
           name="clientName"/>
       <fields
-          name="clientDateOfBirth"/>
+          name="clientDateOfBirth"
+          type="date"/>
       <fields
           name="clientEmail"
           isIndexed="true"/>
       <fields
           name="clientPhoneNumber"/>
-      <!-- Error 5: Missing collectionReference for objectID type -->
       <fields
           name="clientGym"
           type="objectID"/>
-      <!-- Error 6: Invalid collectionReference for objectID type (reference to non-existent collection) -->
       <fields
           name="clientPlan"
           type="objectID"
           collectionReference="//@collections.3"/>
     </schema>
   </collections>
-
   <collections
       name="Staff">
     <schema
@@ -100,20 +90,19 @@
       <fields
           name="role"/>
       <fields
-          name="staffDateOfBirth"/>
+          name="staffDateOfBirth"
+          type="date"/>
       <fields
           name="staffEmail"
           isIndexed="true"/>
       <fields
           name="staffPhoneNumber"/>
-      <!-- Error 7: Invalid type "boolean" for an indexed field (e.g., "staffGym") -->
       <fields
           name="staffGym"
           type="boolean"
           isIndexed="true"/>
     </schema>
   </collections>
-
   <collections
       name="Plan">
     <schema
@@ -126,13 +115,11 @@
       <fields
           name="daysPerWeek"
           type="integer"/>
-      <!-- Error 8: planID should be unique across schemas, but it was duplicated in "Gym" schema above -->
       <fields
           name="planID"
           type="integer"/>
     </schema>
   </collections>
-
   <collections
       name="Machine">
     <schema
@@ -141,7 +128,6 @@
           name="machineName"/>
       <fields
           name="model"/>
-      <!-- Error 9: Missing type for field "brand" -->
       <fields
           name="brand"/>
     </schema>

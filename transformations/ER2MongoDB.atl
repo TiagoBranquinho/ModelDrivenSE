@@ -1,0 +1,50 @@
+module ER2MongoDB;
+
+-- @path MongoDB=/TACS_2/MongoDB.ecore
+-- @path ER=/TACS_2/ER.ecore
+
+create OUT : MongoDB from IN : ER;
+
+rule DiagramToMongoDB {
+    from
+        d: ER!Diagram
+    to
+        m: MongoDB!MongoDB (
+            name <- d.name,
+            collections <- d.entities
+        )
+}
+
+rule EntityToMongoCollection {
+    from
+        e: ER!Entity
+    to
+        m: MongoDB!MongoCollection (
+            name <- e.name,
+			schema <- thisModule.EntityToMongoSchema(e)
+        )
+}
+
+lazy rule EntityToMongoSchema {
+    from
+        e: ER!Entity
+    to
+        m: MongoDB!MongoSchema (
+            name <- e.name + 'Schema',
+			fields <- e.attributes->collect(a | thisModule.AttributeToMongoField(a, e))
+        )
+}
+
+lazy rule AttributeToMongoField {
+    from
+        a: ER!Attribute,
+        e: ER!Entity 
+    to
+        m: MongoDB!MongoField (
+            name <- a.name,
+            type <- a.type, 
+            isRequired <- false,  
+            isIndexed <- a.name = e.primaryKey.name,  
+            isArray <- false  
+        )
+}
