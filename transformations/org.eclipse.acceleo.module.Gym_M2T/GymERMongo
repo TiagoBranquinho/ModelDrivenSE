@@ -1,0 +1,220 @@
+
+// Import Mongoose
+const mongoose = require('mongoose');
+
+// Connect to MongoDB
+async function connectToDatabase() {
+    try {
+        await mongoose.connect('mongodb://localhost:27017/GymERMongo', {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log('Connected to MongoDB!');
+    } catch (err) {
+        console.error('Error connecting to MongoDB:', err);
+        process.exit(1);
+    }
+}
+
+// Schema Definitions
+const machineSchema = new mongoose.Schema({
+    model : { 
+        type: String,
+        index: true,
+        
+        
+        
+    },
+    machineName : { 
+        type: String,
+        
+        
+        
+        
+    },
+    brand : { 
+        type: String,
+        
+        
+        
+        
+    },
+});
+const Machine= mongoose.model('Machine', machineSchema);
+const clientSchema = new mongoose.Schema({
+    Plan : { 
+        type: ObjectId,
+        
+        
+        
+        
+    },
+    Gym : { 
+        type: ObjectId,
+        
+        
+        
+        
+    },
+    clientEmail : { 
+        type: String,
+        index: true,
+        
+        
+        
+    },
+    clientDateOfBirth : { 
+        type: Date,
+        
+        
+        
+        
+    },
+    clientPhoneNumber : { 
+        type: String,
+        
+        
+        
+        
+    },
+    clientName : { 
+        type: String,
+        
+        
+        
+        
+    },
+});
+const Client= mongoose.model('Client', clientSchema);
+const staffSchema = new mongoose.Schema({
+    staffDateOfBirth : { 
+        type: Date,
+        
+        
+        
+        
+    },
+    staffPhoneNumber : { 
+        type: String,
+        
+        
+        
+        
+    },
+    staffName : { 
+        type: String,
+        
+        
+        
+        
+    },
+    staffEmail : { 
+        type: String,
+        index: true,
+        
+        
+        
+    },
+    Gym : { 
+        type: ObjectId,
+        
+        
+        
+        
+    },
+    role : { 
+        type: String,
+        
+        
+        
+        
+    },
+});
+const Staff= mongoose.model('Staff', staffSchema);
+const gymSchema = new mongoose.Schema({
+    city : { 
+        type: String,
+        index: true,
+        
+        
+        
+    },
+    capacity : { 
+        type: Number,
+        
+        
+        
+        
+    },
+    Plan : { 
+        type: Object,
+        
+        
+        type: object, default: [],
+        
+    },
+    Machine : { 
+        type: Object,
+        
+        
+        type: object, default: [],
+        
+    },
+});
+const Gym= mongoose.model('Gym', gymSchema);
+const planSchema = new mongoose.Schema({
+    tier : { 
+        type: String,
+        
+        
+        
+        
+    },
+    price : { 
+        type: Number,
+        
+        
+        
+        
+    },
+    daysPerWeek : { 
+        type: Number,
+        
+        
+        
+        
+    },
+    planID : { 
+        type: Number,
+        index: true,
+        
+        
+        
+    },
+});
+const Plan= mongoose.model('Plan', planSchema);
+
+async function initializeCollections() {
+    try {
+		await Machine.init();
+		await Client.init();
+		await Staff.init();
+		await Gym.init();
+		await Plan.init();
+
+        console.log('Collections initialized and indexes set up!');
+    } catch (err) {
+        console.error('Error initializing collections:', err);
+    }
+}
+
+async function initialize() {
+    await connectToDatabase();
+    await initializeCollections();
+    mongoose.connection.close();
+    console.log('Database setup complete!');
+}
+
+initialize();
+
+

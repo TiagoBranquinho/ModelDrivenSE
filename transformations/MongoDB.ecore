@@ -49,8 +49,8 @@
       <details key="constraints" value="referenceForObjectIDType objectIDTypeForReference schemaForObjectType objectTypeForSchema"/>
     </eAnnotations>
     <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
-      <details key="referenceForObjectIDType" value="&#xA;&#x9;&#x9;    (type = MongoFieldType::objectID) implies (collectionReference &lt;> null)"/>
-      <details key="objectIDTypeForReference" value="&#xA;&#x9;&#x9;    (collectionReference &lt;> null) implies (type = MongoFieldType::objectID)"/>
+      <details key="referenceForObjectIDType" value="&#xA;&#x9;&#x9;    (type = MongoFieldType::objectId) implies (collectionReference &lt;> null)"/>
+      <details key="objectIDTypeForReference" value="&#xA;&#x9;&#x9;    (collectionReference &lt;> null) implies (type = MongoFieldType::objectId)"/>
       <details key="schemaForObjectType" value="&#xA;&#x9;&#x9;    (type = MongoFieldType::object) implies (objectSchema &lt;> null)"/>
       <details key="objectTypeForSchema" value="&#xA;&#x9;&#x9;    (objectSchema &lt;> null) implies (type = MongoFieldType::object)"/>
     </eAnnotations>
@@ -69,10 +69,9 @@
   <eClassifiers xsi:type="ecore:EEnum" name="MongoFieldType">
     <eLiterals name="string"/>
     <eLiterals name="boolean"/>
-    <eLiterals name="float"/>
-    <eLiterals name="integer"/>
+    <eLiterals name="number"/>
     <eLiterals name="date"/>
     <eLiterals name="object"/>
-    <eLiterals name="objectID"/>
+    <eLiterals name="objectId"/>
   </eClassifiers>
 </ecore:EPackage>

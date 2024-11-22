@@ -67,7 +67,7 @@ lazy rule RelationshipToMongoField {
             type <- if r.cardinality = #OneToOne or r.cardinality = #OneToMany then 
                         #object 
                     else 
-                        #objectID
+                        #objectId
 					endif,
             isRequired <- false,
             isIndexed <- false,
