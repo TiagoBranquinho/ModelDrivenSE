@@ -13,7 +13,7 @@
         name="city"/>
     <attributes
         name="capacity"
-        type="integer"/>
+        type="number"/>
   </entities>
   <entities
       name="Client"
@@ -50,13 +50,13 @@
         name="tier"/>
     <attributes
         name="price"
-        type="float"/>
+        type="number"/>
     <attributes
         name="daysPerWeek"
-        type="integer"/>
+        type="number"/>
     <attributes
         name="planID"
-        type="integer"/>
+        type="number"/>
   </entities>
   <entities
       name="Machine"

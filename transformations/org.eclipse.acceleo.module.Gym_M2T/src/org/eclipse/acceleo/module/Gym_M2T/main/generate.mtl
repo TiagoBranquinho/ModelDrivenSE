@@ -4,7 +4,7 @@
 
 [template public generateElement(aMongoDB : MongoDB)]
 [comment @main/]
-[file (aMongoDB.name, false, 'UTF-8')]
+[file (aMongoDB.name + 'Setup.js', false, 'UTF-8')]
 
 // Import Mongoose
 const mongoose = require('mongoose');
@@ -27,13 +27,13 @@ async function connectToDatabase() {
 [for (aCollection : MongoCollection | aMongoDB.collections)]
 const [aCollection.name.toLowerFirst()/]Schema = new mongoose.Schema({
     [for (aField : MongoField | aCollection.schema.fields)]
-    [aField.name/] : { 
-        type: [aField.type.toString().toUpperFirst()/],
+    [aField.name/] : [if (aField.isArray)] ['['/] [/if] { 
+        [if (aField.type = MongoFieldType::objectId)]type: mongoose.Schema.Types.ObjectId,[/if]
+        [if (aField.type <> MongoFieldType::objectId)]type: [aField.type.toString().toUpperFirst()/],[/if]
         [if (aField.isIndexed)]index: true,[/if]
         [if (aField.isRequired)]required: true,[/if]
-        [if (aField.isArray)]type: [aField.type/], default: ['[]'/],[/if]
-        [if (aField.type = MongoFieldType::objectID)]ref: '[aField.collectionReference.name/]',[/if]
-    },
+        [if (aField.type = MongoFieldType::objectId)]ref: '[aField.collectionReference.name/]',[/if]
+     } [if (aField.isArray)] [']'/] [/if] ,
     [/for]
 });
 const [aCollection.name/]= mongoose.model('[aCollection.name/]', [aCollection.name.toLowerFirst()/]Schema);

@@ -57,8 +57,7 @@
   <eClassifiers xsi:type="ecore:EEnum" name="AttributeType">
     <eLiterals name="string"/>
     <eLiterals name="boolean"/>
-    <eLiterals name="float"/>
-    <eLiterals name="integer"/>
+    <eLiterals name="number"/>
     <eLiterals name="date"/>
     <eLiterals name="object"/>
   </eClassifiers>

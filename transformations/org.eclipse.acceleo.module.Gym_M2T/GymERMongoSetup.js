@@ -17,189 +17,189 @@ async function connectToDatabase() {
 }
 
 // Schema Definitions
-const machineSchema = new mongoose.Schema({
-    model : { 
-        type: String,
-        index: true,
-        
-        
-        
-    },
-    machineName : { 
-        type: String,
-        
-        
-        
-        
-    },
-    brand : { 
-        type: String,
-        
-        
-        
-        
-    },
-});
-const Machine= mongoose.model('Machine', machineSchema);
 const clientSchema = new mongoose.Schema({
-    Plan : { 
-        type: ObjectId,
+    Gym :  { 
+        type: mongoose.Schema.Types.ObjectId,
         
         
         
-        
-    },
-    Gym : { 
-        type: ObjectId,
-        
-        
+        ref: 'Gym',
+     }  ,
+    Plan :  { 
+        type: mongoose.Schema.Types.ObjectId,
         
         
-    },
-    clientEmail : { 
+        
+        ref: 'Plan',
+     }  ,
+    clientEmail :  { 
+        
         type: String,
         index: true,
         
         
+     }  ,
+    clientDateOfBirth :  { 
         
-    },
-    clientDateOfBirth : { 
         type: Date,
         
         
         
+     }  ,
+    clientName :  { 
         
-    },
-    clientPhoneNumber : { 
         type: String,
         
         
         
+     }  ,
+    clientPhoneNumber :  { 
         
-    },
-    clientName : { 
         type: String,
         
         
         
-        
-    },
+     }  ,
 });
 const Client= mongoose.model('Client', clientSchema);
+const machineSchema = new mongoose.Schema({
+    model :  { 
+        
+        type: String,
+        index: true,
+        
+        
+     }  ,
+    machineName :  { 
+        
+        type: String,
+        
+        
+        
+     }  ,
+    brand :  { 
+        
+        type: String,
+        
+        
+        
+     }  ,
+});
+const Machine= mongoose.model('Machine', machineSchema);
+const gymSchema = new mongoose.Schema({
+    capacity :  { 
+        
+        type: Number,
+        
+        
+        
+     }  ,
+    Plan :  [  { 
+        
+        type: Object,
+        
+        
+        
+     }  ]  ,
+    city :  { 
+        
+        type: String,
+        index: true,
+        
+        
+     }  ,
+    Machine :  [  { 
+        
+        type: Object,
+        
+        
+        
+     }  ]  ,
+});
+const Gym= mongoose.model('Gym', gymSchema);
 const staffSchema = new mongoose.Schema({
-    staffDateOfBirth : { 
+    role :  { 
+        
+        type: String,
+        
+        
+        
+     }  ,
+    Gym :  { 
+        type: mongoose.Schema.Types.ObjectId,
+        
+        
+        
+        ref: 'Gym',
+     }  ,
+    staffEmail :  { 
+        
+        type: String,
+        index: true,
+        
+        
+     }  ,
+    staffDateOfBirth :  { 
+        
         type: Date,
         
         
         
+     }  ,
+    staffName :  { 
         
-    },
-    staffPhoneNumber : { 
         type: String,
         
         
         
+     }  ,
+    staffPhoneNumber :  { 
         
-    },
-    staffName : { 
         type: String,
         
         
         
-        
-    },
-    staffEmail : { 
-        type: String,
-        index: true,
-        
-        
-        
-    },
-    Gym : { 
-        type: ObjectId,
-        
-        
-        
-        
-    },
-    role : { 
-        type: String,
-        
-        
-        
-        
-    },
+     }  ,
 });
 const Staff= mongoose.model('Staff', staffSchema);
-const gymSchema = new mongoose.Schema({
-    city : { 
-        type: String,
-        index: true,
-        
-        
-        
-    },
-    capacity : { 
-        type: Number,
-        
-        
-        
-        
-    },
-    Plan : { 
-        type: Object,
-        
-        
-        type: object, default: [],
-        
-    },
-    Machine : { 
-        type: Object,
-        
-        
-        type: object, default: [],
-        
-    },
-});
-const Gym= mongoose.model('Gym', gymSchema);
 const planSchema = new mongoose.Schema({
-    tier : { 
-        type: String,
+    planID :  { 
         
-        
-        
-        
-    },
-    price : { 
-        type: Number,
-        
-        
-        
-        
-    },
-    daysPerWeek : { 
-        type: Number,
-        
-        
-        
-        
-    },
-    planID : { 
         type: Number,
         index: true,
         
         
+     }  ,
+    tier :  { 
         
-    },
+        type: String,
+        
+        
+        
+     }  ,
+    daysPerWeek :  { 
+        
+        type: Number,
+        
+        
+        
+     }  ,
+    price :  { 
+        
+        type: Number,
+        
+        
+        
+     }  ,
 });
 const Plan= mongoose.model('Plan', planSchema);
 
 async function initializeCollections() {
     try {
-		await Machine.init();
 		await Client.init();
-		await Staff.init();
+		await Machine.init();
 		await Gym.init();
+		await Staff.init();
 		await Plan.init();
 
         console.log('Collections initialized and indexes set up!');

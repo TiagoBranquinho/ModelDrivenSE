@@ -2,9 +2,64 @@
 [module generate('http://www.example.org/mongo')]
 
 
-[template public generateElement(aMongoCollection : MongoCollection)]
+[template public generateElement(aMongoDB : MongoDB)]
 [comment @main/]
-[file (aMongoCollection.name, false, 'UTF-8')]
+[file (aMongoDB.name, false, 'UTF-8')]
+
+// Import Mongoose
+const mongoose = require('mongoose');
+
+// Connect to MongoDB
+async function connectToDatabase() {
+    try {
+        await mongoose.connect('mongodb://localhost:27017/[aMongoDB.name/]', {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log('Connected to MongoDB!');
+    } catch (err) {
+        console.error('Error connecting to MongoDB:', err);
+        process.exit(1);
+    }
+}
+
+// Schema Definitions
+[for (aCollection : MongoCollection | aMongoDB.collections)]
+const [aCollection.name.toLowerFirst()/]Schema = new mongoose.Schema({
+    [for (aField : MongoField | aCollection.schema.fields)]
+    [aField.name/] : { 
+        type: [aField.type.toString().toUpperFirst()/],
+        [if (aField.isIndexed)]index: true,[/if]
+        [if (aField.isRequired)]required: true,[/if]
+        [if (aField.isArray)]type: [aField.type/], default: ['[]'/],[/if]
+        [if (aField.type = MongoFieldType::objectID)]ref: '[aField.collectionReference.name/]',[/if]
+    },
+    [/for]
+});
+const [aCollection.name/]= mongoose.model('[aCollection.name/]', [aCollection.name.toLowerFirst()/]Schema);
+[/for]
+
+async function initializeCollections() {
+    try {
+        [for (aCollection : MongoCollection | aMongoDB.collections)]
+		await [aCollection.name/].init();
+		[/for]
+
+        console.log('Collections initialized and indexes set up!');
+    } catch (err) {
+        console.error('Error initializing collections:', err);
+    }
+}
+
+async function initialize() {
+    await connectToDatabase();
+    await initializeCollections();
+    mongoose.connection.close();
+    console.log('Database setup complete!');
+}
+
+initialize();
+
 
 [/file]
 [/template]
