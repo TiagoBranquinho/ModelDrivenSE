@@ -1,0 +1,86 @@
+module ER2MongoDB;
+
+-- @path MongoDB=/TACS_2/MongoDB.ecore
+-- @path ER=/TACS_2/ER.ecore
+
+create OUT : MongoDB from IN : ER;
+
+rule DiagramToMongoDB {
+    from
+        d: ER!Diagram
+    to
+        m: MongoDB!MongoDB (
+            name <- d.name + 'Mongo',
+            collections <- d.entities
+        )
+}
+
+rule EntityToMongoCollection {
+    from
+        e: ER!Entity
+    to
+        m: MongoDB!MongoCollection (
+            name <- e.name,
+			schema <- thisModule.EntityToMongoSchema(e)
+        )
+}
+
+helper context ER!Entity def: containingDiagram : ER!Diagram =
+    ER!Diagram.allInstances()->any(d | d.entities->includes(self));
+
+lazy rule EntityToMongoSchema {
+    from
+        e: ER!Entity
+    to
+        m: MongoDB!MongoSchema (
+            name <- e.name + 'Schema',
+            fields <- e.attributes->collect(a | thisModule.AttributeToMongoField(a, e))
+                ->union(
+                    e.containingDiagram.relationships
+                        ->select(r | r.sourceEntity = e)
+                        ->collect(r | thisModule.RelationshipToMongoField(r, e))
+                )
+        )
+}
+
+lazy rule AttributeToMongoField {
+    from
+        a: ER!Attribute,
+        e: ER!Entity 
+    to
+        m: MongoDB!MongoField (
+            name <- a.name,
+            type <- a.type, 
+            isRequired <- false,  
+            isIndexed <- a.name = e.primaryKey.name,  
+            isArray <- false  
+        )
+}
+
+lazy rule RelationshipToMongoField {
+    from
+        r: ER!Relationship,
+        e: ER!Entity
+    to
+        m: MongoDB!MongoField (
+            name <- r.targetEntity.name,
+            type <- if r.cardinality = #OneToOne or r.cardinality = #OneToMany then 
+                        #object 
+                    else 
+                        #objectID
+					endif,
+            isRequired <- false,
+            isIndexed <- false,
+            isArray <- r.cardinality = #OneToMany or r.cardinality = #ManyToMany,
+            collectionReference <- if r.cardinality = #ManyToOne or r.cardinality = #ManyToMany then 
+                                        r.targetEntity 
+                                    else 
+                                        OclUndefined
+									endif,
+            objectSchema <- if r.cardinality = #OneToOne or r.cardinality = #OneToMany then 
+                                thisModule.EntityToMongoSchema(r.targetEntity) 
+                            else 
+                                OclUndefined
+							endif
+        )
+}
