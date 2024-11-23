@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<erd:Diagram
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:erd="http://www.example.org/entityRelation"
+    xsi:schemaLocation="http://www.example.org/entityRelation ER.ecore"
+    name="ExtraGymER">
+  <entities
+      name="Gym"
+      primaryKey="//@entities.0/@attributes.0">
+    <attributes
+        name="city"/>
+  </entities>
+  <entities
+      name="Parking"
+      primaryKey="//@entities.1/@attributes.0">
+    <attributes
+        name="parkingID"
+        type="number"/>
+    <attributes
+        name="area"
+        type="number"/>
+    <attributes
+        name="capacity"
+        type="number"/>
+  </entities>
+  <entities
+      name="Client"
+      primaryKey="//@entities.2/@attributes.1">
+    <attributes
+        name="clientName"/>
+    <attributes
+        name="clientEmail"/>
+  </entities>
+  <relationships
+      name="gymParking"
+      sourceEntity="//@entities.0"
+      targetEntity="//@entities.1"/>
+  <relationships
+      name="workoutPartner"
+      cardinality="ManyToMany"
+      sourceEntity="//@entities.2"
+      targetEntity="//@entities.2"/>
+</erd:Diagram>
